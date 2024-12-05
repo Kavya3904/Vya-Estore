@@ -1,21 +1,19 @@
-// import {
-//     signInWithGooglePopup,
-//     createUserProfileDocument,
-//   } from '../../utils/firebase/firebase.utils';
-  
-  const SignIn = () => {
-    // const logGoogleUser = async () => {
-    //   const response = await signInWithGooglePopup();
-    //   createUserProfileDocument(response);
-    // };
-  
-    return (
-      <div>
-        <h1>Sign In Page</h1>
-        {/* <button onClick={logGoogleUser}>Sign in with Google Popup</button> */}
-      </div>
-    );
+import { signInWithGooglePopup, userDocumentFirebasedb } from "../../util/firebase/firebase";
+
+const SignIn = () => {
+  const usersignin = async () => {
+    const {user} = await signInWithGooglePopup();
+    console.log(user)
+    userDocumentFirebasedb(user)
+   
   };
-  
-  export default SignIn;
-  
+
+  return (
+    <div>
+      <h1>Sign In Page</h1>
+      <button onClick={usersignin}>SignIn</button>
+    </div>
+  );
+};
+
+export default SignIn;
