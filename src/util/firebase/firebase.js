@@ -4,7 +4,9 @@ import {
   signInWithPopup,
   getAuth,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from "firebase/auth";
 
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
@@ -32,22 +34,21 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
-export const userDocumentFirebasedb = async (userAuth) => {
+export const userDocumentFirebasedb = async ( userAuth ,additionalInformation = {}) => {
   const userDocRef = doc(db, "users", userAuth.uid);
-  console.log("userDocRef : ", userDocRef);
 
   const snapshot = await getDoc(userDocRef);
-  console.log("snapshot : ", snapshot);
 
   if (!snapshot.exists()) {
     const { displayName, email } = userAuth;
     const createdAt = new Date();
 
     try {
-      setDoc(userDocRef, {
+      await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
+        ...additionalInformation,
       });
     } catch (error) {
       console.log("Error : ", error.message);
@@ -59,24 +60,17 @@ export const userDocumentFirebasedb = async (userAuth) => {
 
 export const signupEmailAuth = async (email, pass) => {
   if (!email || !pass) return;
-
-  console.log(email, pass);
-
-  try {
+ 
     return await createUserWithEmailAndPassword(auth, email, pass);
-  } catch (error) {
-    console.log("Error : ", error.message);
-  }
 };
 
 export const signinEmailAuth = async (email, pass) => {
   if (!email || !pass) return;
 
-  console.log(email, pass);
+  return await signInWithEmailAndPassword(auth, email, pass);
 
-  try {
-    return await signInWithEmailAndPassword(auth, email, pass);
-  } catch (error) {
-    console.log("Error : ", error.message);
-  }
 };
+
+export const userSignOut = async () => await signOut(auth);
+
+export const onAuthUserStateChangeListener  =  (callback) => onAuthStateChanged(auth , callback)
