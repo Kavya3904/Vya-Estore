@@ -3,15 +3,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   getAuth,
-  signInWithRedirect,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 
-import { 
-    getFirestore, 
-    doc, 
-    setDoc, 
-    getDoc 
-} from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBi76QboyB17Wg3aTCucW2eWyO3D5rCCAU",
@@ -34,31 +29,41 @@ provider.setCustomParameters({
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
-export const db =  getFirestore()
+export const db = getFirestore();
 
 export const userDocumentFirebasedb = async (userAuth) => {
-    
-    const userDocRef =  doc(db, 'users' ,userAuth.uid)
-    console.log("userDocRef : " , userDocRef)
+  const userDocRef = doc(db, "users", userAuth.uid);
+  console.log("userDocRef : ", userDocRef);
 
-    const snapshot = await getDoc(userDocRef);
-    console.log("snapshot : " , snapshot)
+  const snapshot = await getDoc(userDocRef);
+  console.log("snapshot : ", snapshot);
 
-    if(!snapshot.exists()){
-        const {displayName , email} = userAuth;
-        const createdAt = new Date();
+  if (!snapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
 
-        try {
-            setDoc(userDocRef, {
-                displayName,
-                email,
-                createdAt
-            });
-
-        }catch(error){
-            console.log("Error : " , error.message);
-        }
-
+    try {
+      setDoc(userDocRef, {
+        displayName,
+        email,
+        createdAt,
+      });
+    } catch (error) {
+      console.log("Error : ", error.message);
     }
-    return userDocRef;
-}
+  }
+  return userDocRef;
+};
+
+
+export const signinEmailAuth = async (email, pass) => {
+  if (!email || !pass) return;
+
+  console.log(email, pass);
+
+  try {
+    return await createUserWithEmailAndPassword(auth, email, pass);
+  } catch (error) {
+    console.log("Error : ", error.message);
+  }
+};
