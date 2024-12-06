@@ -1,11 +1,11 @@
 
-import "../catogories.styles.scss";
-import snekers from "../images/snekers.jpg";
-import jacket from "../images/Jackets.jpg";
-import tops from "../images/Tops.jpg";
-import hat from "../images/Hats.jpg";
-import Pants from "../images/Pants.jpg";
-import CatogryItem from "../components/catogry-item/catogry-item";
+import "../../catogories.styles.scss";
+import snekers from "../../images/snekers.jpg";
+import jacket from "../../images/Jackets.jpg";
+import tops from "../../images/Tops.jpg";
+import hat from "../../images/Hats.jpg";
+import Pants from "../../images/Pants.jpg";
+import CatogryItem from "../../components/catogry-item/catogry-item";
 import { Outlet } from "react-router-dom";
 function Home() {
 
