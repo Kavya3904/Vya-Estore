@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { signinEmailAuth ,userDocumentFirebasedb} from '../../util/firebase/firebase';
+import { signupEmailAuth ,userDocumentFirebasedb} from '../../util/firebase/firebase';
 import FormInput from '../form-input/form-input';
 import Button from '../Button/button-component';
 
@@ -33,12 +33,16 @@ const SignUpForm = () => {
       return;
     }
     try{
-      const {user} = await signinEmailAuth(email , password)
+      const {user} = await signupEmailAuth(email , password)
       user.displayName = displayName;
       userDocumentFirebasedb(user)
       resetFormFields();
     }catch(error){
-      console.log("Error : ", error.message)
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Email already in use');
+      } else {
+        console.log('user creation encountered an error', error);
+      }
     }
   }
 

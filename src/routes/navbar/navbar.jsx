@@ -9,8 +9,8 @@ const Navigation = () => {
   return (
     <Fragment>
       <div className='navigation'>
-        <Link className='logo-container' to='/'>
-            <h3>Shop @ Vya 😎</h3>
+        <Link className='nav-link' to='/'>
+            Home
         </Link>
         <div className='nav-links-container'>
           <Link className='nav-link' to='/shop'>

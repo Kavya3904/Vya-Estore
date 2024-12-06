@@ -4,6 +4,7 @@ import {
   signInWithPopup,
   getAuth,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from "firebase/auth";
 
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
@@ -56,13 +57,25 @@ export const userDocumentFirebasedb = async (userAuth) => {
 };
 
 
-export const signinEmailAuth = async (email, pass) => {
+export const signupEmailAuth = async (email, pass) => {
   if (!email || !pass) return;
 
   console.log(email, pass);
 
   try {
     return await createUserWithEmailAndPassword(auth, email, pass);
+  } catch (error) {
+    console.log("Error : ", error.message);
+  }
+};
+
+export const signinEmailAuth = async (email, pass) => {
+  if (!email || !pass) return;
+
+  console.log(email, pass);
+
+  try {
+    return await signInWithEmailAndPassword(auth, email, pass);
   } catch (error) {
     console.log("Error : ", error.message);
   }
