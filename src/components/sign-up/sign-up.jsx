@@ -1,15 +1,19 @@
-import { useState } from 'react';
-import { signupEmailAuth ,userDocumentFirebasedb} from '../../util/firebase/firebase';
-import FormInput from '../form-input/form-input';
-import Button from '../Button/button-component';
+import { useContext, useState } from "react";
+import {
+  signupEmailAuth,
+  userDocumentFirebasedb,
+} from "../../util/firebase/firebase";
+import FormInput from "../form-input/form-input";
+import Button from "../Button/button-component";
 
-import './sign-up.styles.scss';
+import "./sign-up.styles.scss";
+import { UserContext } from "../../contexts/user-context";
 
 const defaultFormFields = {
-  displayName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  displayName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
 };
 
 const SignUpForm = () => {
@@ -22,71 +26,71 @@ const SignUpForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleSubmit = async (event)=>{
+  const handleSubmit = async (event) => {
     const resetFormFields = () => {
       setFormFields(defaultFormFields);
     };
 
     event.preventDefault();
-    if(formFields.confirmPassword !== formFields.password) {
-      alert ("Password does not match")
+    if (formFields.confirmPassword !== formFields.password) {
+      alert("Password does not match");
       return;
     }
-    try{
-      const {user} = await signupEmailAuth(email , password)
+    try {
+      const { user } = await signupEmailAuth(email, password);
       user.displayName = displayName;
-      userDocumentFirebasedb(user)
+      userDocumentFirebasedb(user, { displayName });
       resetFormFields();
-    }catch(error){
-      if (error.code === 'auth/email-already-in-use') {
-        alert('Email already in use');
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        alert("Email already in use");
       } else {
-        console.log('user creation encountered an error', error);
+        console.log("user creation encountered an error", error);
       }
     }
-  }
+  };
 
   return (
-    <div className='sign-up-container'>
+    <div className="sign-up-container">
       <h2>Don't have an account?</h2>
       <span>Sign up with your email and password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label='Display Name'
-          type='text'
+          label="Display Name"
+          type="text"
           required
           onChange={handleChange}
-          name='displayName'
+          name="displayName"
           value={displayName}
         />
 
         <FormInput
-          label='Email'
-          type='email'
+          label="Email"
+          type="email"
           required
           onChange={handleChange}
-          name='email'
+          name="email"
           value={email}
         />
 
         <FormInput
-          label='Password'
-          type='password'
+          label="Password"
+          type="password"
           required
           onChange={handleChange}
-          name='password'
+          name="password"
           value={password}
         />
 
         <FormInput
-          label='Confirm Password'
-          type='password'
+          label="Confirm Password"
+          type="password"
           required
           onChange={handleChange}
-          name='confirmPassword'
+          name="confirmPassword"
           value={confirmPassword}
         />
-        <Button type='submit'>Sign Up</Button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </div>
   );

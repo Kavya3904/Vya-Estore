@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   signinEmailAuth,
   signInWithGooglePopup,
@@ -8,6 +8,7 @@ import FormInput from "../form-input/form-input";
 import Button from "../Button/button-component";
 
 import "./sign-in.styles.scss";
+import { UserContext } from "../../contexts/user-context";
 
 const defaultFormFields = {
   email: "",
@@ -19,8 +20,7 @@ const SignInForm = () => {
   const { email, password } = formFields;
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    userDocumentFirebasedb(user);
+    await signInWithGooglePopup();
   };
 
   const handleChange = (event) => {
@@ -37,8 +37,7 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const response = await signinEmailAuth(email,password);
-      console.log("respomse:",response);
+      await signinEmailAuth(email,password);
       resetFormFields();
     } catch (error) {
       switch (error.code) {
@@ -47,6 +46,9 @@ const SignInForm = () => {
           break;
         case 'auth/user-not-found':
           alert('no user associated with this email');
+          break;
+          case 'auth/invalid-credential':
+          alert('Invalid Email or password');
           break;
         default:
           console.log(error);
