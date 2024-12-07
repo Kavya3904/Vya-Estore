@@ -1,13 +1,17 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Outlet, Link } from "react-router-dom";
 
 import "./navbar.styles.scss";
 import { UserContext } from "../../contexts/user-context";
 import { userSignOut } from "../../util/firebase/firebase";
+import {Carticon} from "../../components/cart/cart-icon/cart-icon";
+import { Cartdropdown } from "../../components/cart/cart-dropdown/cart-dropdown";
+import { CartContext } from "../../contexts/cart-product";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
-
+  const { isDropdown  } = useContext(CartContext);
+  
 
   return (
     <Fragment>
@@ -28,7 +32,10 @@ const Navigation = () => {
               SIGN IN
             </Link>
           )}
+           <Carticon   />
+           {isDropdown ?  <Cartdropdown/> : ''}
         </div>
+       
       </div>
       <Outlet />
     </Fragment>
