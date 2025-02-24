@@ -11,7 +11,7 @@ return(
     <Route path="/" element={<Navbar/>}>
       <Route index element={<Home/>} />
       <Route path='authentication' element={<Authentication />} />
-      <Route path='shop' element={<Shop />} />
+      <Route path='shop/*' element={<Shop />} />
       <Route path='checkout' element={<ChekoutPage />} />
     </Route>
     

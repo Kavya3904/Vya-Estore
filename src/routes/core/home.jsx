@@ -14,26 +14,31 @@ function Home() {
           id: 1,
           catogory: "SNEAKERS",
           imageUrl: snekers,
+          route: 'shop/sneakers',
         },
         {
           id: 2,
           catogory: "JACKETS",
           imageUrl: jacket,
+          route: 'shop/jackets',
         },
         {
           id: 3,
           catogory: "PANTS",
           imageUrl: Pants,
+          route: 'shop/pants',
         },
         {
           id: 4,
           catogory: "TOPS",
           imageUrl: tops,
+          route: 'shop/tops',
         },
         {
           id: 5,
           catogory: "HATS",
           imageUrl: hat,
+          route: 'shop/hats',
         },
       ];
     
@@ -49,6 +54,7 @@ function Home() {
                 imageUrl={catogry.imageUrl}
                 id={catogry.id}
                 catogory={catogry.catogory}
+                route ={catogry.route}
               />
             ))}
           </div>

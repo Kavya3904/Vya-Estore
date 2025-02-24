@@ -6,10 +6,19 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  writeBatch,
+  collection,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBi76QboyB17Wg3aTCucW2eWyO3D5rCCAU",
@@ -34,7 +43,10 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
 export const db = getFirestore();
 
-export const userDocumentFirebasedb = async ( userAuth ,additionalInformation = {}) => {
+export const userDocumentFirebasedb = async (
+  userAuth,
+  additionalInformation = {}
+) => {
   const userDocRef = doc(db, "users", userAuth.uid);
 
   const snapshot = await getDoc(userDocRef);
@@ -57,20 +69,44 @@ export const userDocumentFirebasedb = async ( userAuth ,additionalInformation = 
   return userDocRef;
 };
 
+export const addcollectiontodb = async (collectionKey, Objecttoadd) => {
+  const batch = writeBatch(db);
+  const collectionRef = collection(db, collectionKey);
+  Objecttoadd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("done");
+};
+
+export const getCollectionfromdb = async () => {
+  const collectionRef = collection(db, "catogries");
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+  const catogrymap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return catogrymap;
+};
 
 export const signupEmailAuth = async (email, pass) => {
   if (!email || !pass) return;
- 
-    return await createUserWithEmailAndPassword(auth, email, pass);
+
+  return await createUserWithEmailAndPassword(auth, email, pass);
 };
 
 export const signinEmailAuth = async (email, pass) => {
   if (!email || !pass) return;
 
   return await signInWithEmailAndPassword(auth, email, pass);
-
 };
 
 export const userSignOut = async () => await signOut(auth);
 
-export const onAuthUserStateChangeListener  =  (callback) => onAuthStateChanged(auth , callback)
+export const onAuthUserStateChangeListener = (callback) =>
+  onAuthStateChanged(auth, callback);
